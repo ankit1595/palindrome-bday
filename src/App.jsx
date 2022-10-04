@@ -3,6 +3,7 @@ import { useState } from "react";
 
 function App() {
   const [bdayInput, setBdayInput] = useState("");
+  const [output, setOutput] = useState("");
 
   function isPalindrome(str) {
     const reverseStr = str.split("").reverse().join("");
@@ -31,12 +32,12 @@ function App() {
   function getDateInAllFormats(date) {
     const dateStr = dateToString(date);
     const { day, month, year } = dateStr;
-    var ddmmyyyy = day + month + year;
-    var mmddyyyy = month + day + year;
-    var yyyymmdd = year + month + day;
-    var ddmmyy = day + month + year.slice(-2);
-    var mmddyy = month + day + year.slice(-2);
-    var yyddmm = year.slice(-2) + day + month;
+    let ddmmyyyy = day + month + year;
+    let mmddyyyy = month + day + year;
+    let yyyymmdd = year + month + day;
+    let ddmmyy = day + month + year.slice(-2);
+    let mmddyy = month + day + year.slice(-2);
+    let yyddmm = year.slice(-2) + day + month;
 
     return [ddmmyyyy, mmddyyyy, yyyymmdd, ddmmyy, mmddyy, yyddmm];
   }
@@ -157,28 +158,54 @@ function App() {
     return [count, prevDate];
   }
 
-  const date = { day: 11, month: 2, year: 2020 };
+  // const date = { day: 11, month: 2, year: 2020 };
 
-  console.log("output: ", getPrevPalindromeDate(date));
+  // console.log("output: ", getPrevPalindromeDate(date));
 
   function getDate(date) {
     const dateArray = date.split("-");
     return {
-      day: dateArray[2],
-      month: dateArray[1],
-      year: dateArray[0],
+      day: Number(dateArray[2]),
+      month: Number(dateArray[1]),
+      year: Number(dateArray[0]),
     };
   }
 
   function handleInput(e) {
     setBdayInput(e.target.value);
-    // getDate(inputDate);
+  }
+
+  function handleSubmit() {
+    if (bdayInput !== "") {
+      let date = getDate(bdayInput);
+      let dateStr = dateToString(date);
+      let isPalindrome = checkPalindromeForAllDateFormats(dateStr);
+
+      if (!isPalindrome) {
+        const [countN, nextDate] = getNextPalindromeDate(date);
+        const [countP, prevDate] = getPrevPalindromeDate(date);
+
+        if (countN < countP) {
+          setOutput(
+            `Not a Palindrome. The nearest palindrome date is ${nextDate.day}-${nextDate.month}-${nextDate.year}, you missed by ${countN} days.`
+          );
+        } else {
+          setOutput(
+            `Not a Palindrome. The nearest palindrome date is ${prevDate.day}-${prevDate.month}-${prevDate.year}, you missed by ${countP} days.`
+          );
+        }
+      } else {
+        setOutput("Yay! Your birthday is palindrome!");
+      }
+    }
   }
 
   return (
     <div className="App">
       <h1>Is your birthday Palindrome?</h1>
       <input type="date" onChange={handleInput} />
+      <button onClick={handleSubmit}>Show</button>
+      <div>{output}</div>
     </div>
   );
 }
