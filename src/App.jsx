@@ -6,7 +6,6 @@ function App() {
 
   function isPalindrome(str) {
     const reverseStr = str.split("").reverse().join("");
-    console.log("reverse", reverseStr);
     return str === reverseStr;
   }
 
@@ -30,7 +29,8 @@ function App() {
   }
 
   function getDateInAllFormats(date) {
-    const { day, month, year } = date;
+    const dateStr = dateToString(date);
+    const { day, month, year } = dateStr;
     var ddmmyyyy = day + month + year;
     var mmddyyyy = month + day + year;
     var yyyymmdd = year + month + day;
@@ -94,14 +94,75 @@ function App() {
 
     return { day, month, year };
   }
+  function getPrevDate(date) {
+    let day = date.day - 1;
+    let month = date.month;
+    let year = date.year;
 
-  const date = { day: 29, month: 2, year: 2021 };
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  console.log("output: ", getNextDate(date));
+    if (day === 0) {
+      month--;
+
+      if (month === 0) {
+        month = 12;
+        day = 31;
+        year--;
+      } else if (month === 2) {
+        if (isLeapYear(year)) {
+          day = 29;
+        } else {
+          day = 28;
+        }
+      } else {
+        day = daysInMonth[month - 1];
+      }
+    }
+
+    return {
+      day: day,
+      month: month,
+      year: year,
+    };
+  }
+
+  function getNextPalindromeDate(date) {
+    let nextDate = getNextDate(date);
+    let count = 0;
+    while (1) {
+      count++;
+      const isPalindrome = checkPalindromeForAllDateFormats(nextDate);
+      if (isPalindrome) {
+        break;
+      } else {
+        nextDate = getNextDate(nextDate);
+      }
+    }
+
+    return [count, nextDate];
+  }
+  function getPrevPalindromeDate(date) {
+    let prevDate = getPrevDate(date);
+    let count = 0;
+    while (1) {
+      count++;
+      const isPalindrome = checkPalindromeForAllDateFormats(prevDate);
+      if (isPalindrome) {
+        break;
+      } else {
+        prevDate = getPrevDate(prevDate);
+      }
+    }
+
+    return [count, prevDate];
+  }
+
+  const date = { day: 11, month: 2, year: 2020 };
+
+  console.log("output: ", getPrevPalindromeDate(date));
 
   function getDate(date) {
     const dateArray = date.split("-");
-    console.log(dateArray);
     return {
       day: dateArray[2],
       month: dateArray[1],
