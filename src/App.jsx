@@ -173,6 +173,7 @@ function App() {
 
   function handleInput(e) {
     setBdayInput(e.target.value);
+    setOutput("");
   }
 
   function handleSubmit() {
@@ -197,14 +198,22 @@ function App() {
       } else {
         setOutput("Yay! Your birthday is palindrome!");
       }
+    } else {
+      setOutput("Enter date to see the magic!");
     }
+  }
+
+  function handleReset() {
+    setBdayInput("");
+    setOutput("");
   }
 
   return (
     <div className="App">
       <h1>Is your birthday Palindrome?</h1>
-      <input type="date" onChange={handleInput} />
+      <input type="date" onChange={handleInput} value={bdayInput} />
       <button onClick={handleSubmit}>Show</button>
+      <button onClick={handleReset}>Reset</button>
       <div>{output}</div>
     </div>
   );
