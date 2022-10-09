@@ -1,9 +1,16 @@
 import "./App.css";
 import { useState } from "react";
 
+import twitterLogo from "./images/brand-logos/logo-twitter.svg";
+import githubLogo from "./images/brand-logos/logo-github.svg";
+import linkedinLogo from "./images/brand-logos/logo-linkedin.svg";
+import mailLogo from "./images/brand-logos/mail.svg";
+import angelLogo from "./images/brand-logos/angel-icon.svg";
+
 function App() {
   const [bdayInput, setBdayInput] = useState("");
   const [output, setOutput] = useState("");
+  const [textColor, setTextColor] = useState("#17a2b8");
 
   function isPalindrome(str) {
     const reverseStr = str.split("").reverse().join("");
@@ -174,9 +181,11 @@ function App() {
   function handleInput(e) {
     setBdayInput(e.target.value);
     setOutput("");
+    setTextColor("");
   }
 
   function handleSubmit() {
+    setTextColor("");
     if (bdayInput !== "") {
       let date = getDate(bdayInput);
       let dateStr = dateToString(date);
@@ -190,13 +199,16 @@ function App() {
           setOutput(
             `Not a Palindrome. The nearest palindrome date is ${nextDate.day}-${nextDate.month}-${nextDate.year}, you missed by ${countN} days.`
           );
+          setTextColor("#dc3545");
         } else {
           setOutput(
             `Not a Palindrome. The nearest palindrome date is ${prevDate.day}-${prevDate.month}-${prevDate.year}, you missed by ${countP} days.`
           );
+          setTextColor("#dc3545");
         }
       } else {
         setOutput("Yay! Your birthday is palindrome!");
+        setTextColor("#28a745");
       }
     } else {
       setOutput("Enter date to see the magic!");
@@ -206,15 +218,81 @@ function App() {
   function handleReset() {
     setBdayInput("");
     setOutput("");
+    setTextColor("");
   }
 
   return (
     <div className="App">
       <h1>Is your birthday Palindrome?</h1>
-      <input type="date" onChange={handleInput} value={bdayInput} />
-      <button onClick={handleSubmit}>Show</button>
-      <button onClick={handleReset}>Reset</button>
-      <div>{output}</div>
+      <main>
+        <input type="date" onChange={handleInput} value={bdayInput} />
+        <button onClick={handleSubmit}>Show</button>
+        <button
+          style={{
+            backgroundColor: "#dc3545",
+            color: "white",
+            borderColor: "#dc3545",
+          }}
+          onClick={handleReset}>
+          Reset
+        </button>
+      </main>
+      <div className="output" style={{ color: textColor }}>
+        {output}
+      </div>
+      <footer className="footer">
+        <div className="footer-header">
+          © | 2022 |{" "}
+          <a
+            className="link"
+            href="http://ankit-sharma15.netlify.app"
+            target={"_blank"}>
+            Ankit Sharma
+          </a>{" "}
+        </div>
+        <ul className="list-non-bullet link-social">
+          <li className="list-item-inline">
+            <a
+              className="link"
+              href="https://twitter.com/ankit1595"
+              target="_blank">
+              <img src={twitterLogo} alt="twitter-logo" />
+            </a>
+          </li>
+          <li className="list-item-inline">
+            <a
+              className="link"
+              href="https://github.com/ankit1595"
+              target="_blank">
+              <img src={githubLogo} alt="github-logo" />
+            </a>
+          </li>
+          <li className="list-item-inline">
+            <a
+              className="link"
+              href="https://www.linkedin.com/in/ankit1595"
+              target="_blank">
+              <img src={linkedinLogo} alt="linkedin-logo" />
+            </a>
+          </li>
+          <li className="list-item-inline">
+            <a
+              className="link"
+              href="mailto:ankit.95sharma@gmail.com"
+              target="_blank">
+              <img src={mailLogo} alt="mail-logo" />
+            </a>
+          </li>
+          <li className="list-item-inline">
+            <a
+              className="link"
+              href="https://www.angel.co/u/ankit1595"
+              target="_blank">
+              <img src={angelLogo} alt="angel-logo" />
+            </a>
+          </li>
+        </ul>
+      </footer>
     </div>
   );
 }
